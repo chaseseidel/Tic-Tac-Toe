@@ -22,10 +22,10 @@ const GameBoard = (function() {
                     if (Game.remainingSpots > 0) {
                         Game.nextPlayer();
                     } else {
-
+                        restartOverlay.classList.toggle('active');
                     }
                 } else {
-                    
+                    restartOverlay.classList.toggle('active');
                 }
             })
         });
@@ -71,6 +71,6 @@ const Game = (function() {
 
 //-------------------------------DOM VARIABLES-------------------------------//
 
-
+const restartOverlay = document.querySelector('.restart-game');
 
 //-------------------------------EVENT LISTENERS-------------------------------//
