@@ -17,10 +17,11 @@ const GameBoard = (function() {
                 box.style.pointerEvents = 'none';
                 board[index] = Game.currentPlayer.marker;
                 Game.remainingSpots -= 1;
-                Game.declareWinner();
-                if (Game.winner === false) {
+                Game.checkForWinner();
+                if (Game.getWinner() === false) {
                     if (Game.remainingSpots > 0) {
                         Game.nextPlayer();
+                        currentPlayer.textContent = `${Game.displayCurrentPlayer()}'s Turn`;
                     } else {
                         restartOverlay.classList.toggle('active');
                     }
@@ -30,7 +31,10 @@ const GameBoard = (function() {
             })
         });
     }
-    return {renderBoard, board};
+    return {
+        renderBoard,
+        board
+    };
 })();
 
 const Game = (function() {
@@ -55,22 +59,47 @@ const Game = (function() {
     function nextPlayer() {
         this.currentPlayer === player1 ? this.currentPlayer = player2 : this.currentPlayer = player1;
     }
-    
-    function declareWinner() {
+
+    function displayCurrentPlayer () {
+        if (this.currentPlayer === player1) {
+            return 'Player 1 (X)';
+        } else {
+            return 'Player 2 (O)';
+        }
+    }
+
+    function checkForWinner() {
         winningCombinations.forEach(item => {
             if (GameBoard.board[item[0]] === this.currentPlayer.marker && GameBoard.board[item[1]] === this.currentPlayer.marker && GameBoard.board[item[2]] === this.currentPlayer.marker) {
-                this.winner = true;
+                this.setWinner();
             }
         })
     }
 
+    function setWinner() {
+        winner = true;
+    }
+
+    function getWinner() {
+        return winner;
+    }
+
     return {
-        currentPlayer, nextPlayer, remainingSpots, winner, declareWinner, winningCombinations
+        currentPlayer, 
+        nextPlayer, 
+        remainingSpots, 
+        checkForWinner, 
+        setWinner, 
+        getWinner,
+        displayCurrentPlayer
     };
 })()
 
 //-------------------------------DOM VARIABLES-------------------------------//
 
 const restartOverlay = document.querySelector('.restart-game');
+const currentPlayer = document.getElementById('current-player');
 
 //-------------------------------EVENT LISTENERS-------------------------------//
+
+GameBoard.renderBoard();
