@@ -8,7 +8,11 @@
     <script src="./js/script.js" defer></script>
 </head>
 <body>
+    <div class="top-bar">
+        <h1 id="logo-text">Tic Tac Toe</h1>
+    </div>
     <section class="main-content">
+        <h1 id="current-player">Player 1's (X) Turn</h1>
         <div class="game-board">
             <button class="tile"></button>
             <button class="tile"></button>
@@ -24,7 +28,7 @@
     <section class="restart-game">
         <div class="overlay"></div>
         <div class="game-over">
-            <div class="form-text">Game Over</div>
+            <div class="message">Game Over</div>
             <div class="close-btn">&times;</div>
             <button type="submit" id="submit-btn">Restart</button>
         </div>
