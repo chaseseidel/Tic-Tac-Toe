@@ -1,7 +1,10 @@
 //-------------------------------FACTORY-------------------------------//
 
-const Player = marker => {
-    return {marker};
+const Player = (name, marker) => {
+    return {
+        name,
+        marker
+    };
 }
 
 //-------------------------------MODULES-------------------------------//
@@ -36,8 +39,8 @@ const GameBoard = (function() {
 })();
 
 const Game = (function() {
-    const player1 = Player('X');
-    const player2 = Player('O');
+    const player1 = Player('Player 1', 'X');
+    const player2 = Player('Player 2', 'O');
 
     let currentPlayer = player1;
     let remainingSpots = 9;
@@ -60,9 +63,9 @@ const Game = (function() {
 
     function displayCurrentPlayer () {
         if (this.currentPlayer === player1) {
-            return 'Player 1';
+            return `${player1.name}`;
         } else {
-            return 'Player 2';
+            return `${player2.name}`;
         }
     }
 
@@ -89,6 +92,8 @@ const Game = (function() {
     }
 
     return {
+        player1,
+        player2,
         currentPlayer, 
         nextPlayer, 
         remainingSpots, 
@@ -107,14 +112,25 @@ const currentPlayer = document.getElementById('current-player');
 const restartButton = document.getElementById('restart-btn');
 const gridBoxes = document.querySelectorAll('.tile');
 const resultMessage = document.getElementById('result');
+const player1Name = document.getElementById('player1');
+const player2Name = document.getElementById('player2');
+const playButton = document.getElementById('play-btn');
+const playOverlay = document.querySelector('.enter-names');
 
 //-------------------------------EVENT LISTENERS-------------------------------//
 
 restartButton.addEventListener('click', () => {
     Game.reset();
     GameBoard.resetBoard();
-    currentPlayer.textContent = "Player 1's Turn";
+    currentPlayer.textContent = `${Game.player1.name}'s Turn`;
     togglePopup();
+})
+
+playButton.addEventListener('click', () => {
+    playOverlay.classList.toggle('inactive');
+    Game.player1.name = player1Name.value;
+    Game.player2.name = player2Name.value;
+    currentPlayer.textContent = `${Game.player1.name}'s Turn`;
 })
 
 gridBoxes.forEach((box, index) => {
