@@ -66,6 +66,70 @@ html {
     padding: 50px;
 }
 
+.enter-names .overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100vh;
+    width: 100vw;
+    z-index: 1;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    backdrop-filter: blur(4px);
+    display: flex;
+}
+
+.enter-names .player-names {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    transform: translate(-50%, -50%) scale(1);
+    background-color: var(--white-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 6px;
+    padding: 50px;
+}
+
+.enter-names.inactive .overlay {
+    display: none;
+}
+
+.enter-names.inactive .player-names {
+    transition: all 200ms ease-in-out;
+    transform: translate(-50%, -50%) scale(0);
+}
+
+.input {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.enter-names #message {
+    font-size: 1.85rem;
+    padding: 30px 0;
+}
+
+input {
+    font-size: 1.2rem;
+    height: auto;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid var(--gray-color-1);
+    border-radius: 2px;
+}
+
+input:focus {
+    outline: none;
+}
+
+#play-btn {
+    margin-top: 20px;
+}
+
 .restart-game .overlay {
     background-color: rgba(0, 0, 0, 0.5);
     height: 100vh;
@@ -128,7 +192,7 @@ html {
     font-size: 1.5rem;
 }
 
-#restart-btn {
+#restart-btn, #play-btn {
     height: 40px;
     width: 100%;
     font-size: 1.2rem;
@@ -136,7 +200,7 @@ html {
     border: 1px solid var(--gray-color-1);
 }
 
-#restart-btn:hover {
+#restart-btn:hover, #play-btn:hover {
     transform: scale(1.02);
     background-color: var(--gray-color-2);
 }
