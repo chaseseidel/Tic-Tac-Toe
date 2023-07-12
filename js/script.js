@@ -7,33 +7,31 @@ const Player = marker => {
 //-------------------------------MODULES-------------------------------//
 
 const GameBoard = (function() {
-    let board = new Array(9);
-    function renderBoard() {
-        const gridBoxes = document.querySelectorAll('.tile');
+    let _board = new Array(9);
+
+    function resetBoard() {
+        for(let i = 0; i < 9; i += 1) {
+            _board[i] = '';
+        }
         gridBoxes.forEach((box, index) => {
-            box.addEventListener('click', () => {
-                box.textContent = Game.currentPlayer.marker;
-                box.classList.add(Game.currentPlayer.marker);
-                box.style.pointerEvents = 'none';
-                board[index] = Game.currentPlayer.marker;
-                Game.remainingSpots -= 1;
-                Game.checkForWinner();
-                if (Game.getWinner() === false) {
-                    if (Game.remainingSpots > 0) {
-                        Game.nextPlayer();
-                        currentPlayer.textContent = `${Game.displayCurrentPlayer()}'s Turn`;
-                    } else {
-                        restartOverlay.classList.toggle('active');
-                    }
-                } else {
-                    restartOverlay.classList.toggle('active');
-                }
-            })
-        });
+            box.className = 'tile';
+            box.style.pointerEvents = 'auto';
+            box.textContent = _board[index];
+        })
     }
+
+    function setBoardMarker(marker, index) {
+        _board[index] = marker;
+    }
+
+    function getBoardMarker(index) {
+        return _board[index];
+    }
+
     return {
-        renderBoard,
-        board
+        resetBoard,
+        setBoardMarker,
+        getBoardMarker
     };
 })();
 
@@ -62,15 +60,15 @@ const Game = (function() {
 
     function displayCurrentPlayer () {
         if (this.currentPlayer === player1) {
-            return 'Player 1 (X)';
+            return 'Player 1';
         } else {
-            return 'Player 2 (O)';
+            return 'Player 2';
         }
     }
 
     function checkForWinner() {
         winningCombinations.forEach(item => {
-            if (GameBoard.board[item[0]] === this.currentPlayer.marker && GameBoard.board[item[1]] === this.currentPlayer.marker && GameBoard.board[item[2]] === this.currentPlayer.marker) {
+            if (GameBoard.getBoardMarker(item[0]) === this.currentPlayer.marker && GameBoard.getBoardMarker(item[1]) === this.currentPlayer.marker && GameBoard.getBoardMarker(item[2]) === this.currentPlayer.marker) {
                 this.setWinner();
             }
         })
@@ -84,6 +82,12 @@ const Game = (function() {
         return winner;
     }
 
+    function reset() {
+        this.currentPlayer = player1;
+        this.remainingSpots = 9;
+        winner = false;
+    }
+
     return {
         currentPlayer, 
         nextPlayer, 
@@ -91,7 +95,8 @@ const Game = (function() {
         checkForWinner, 
         setWinner, 
         getWinner,
-        displayCurrentPlayer
+        displayCurrentPlayer,
+        reset
     };
 })()
 
@@ -99,7 +104,44 @@ const Game = (function() {
 
 const restartOverlay = document.querySelector('.restart-game');
 const currentPlayer = document.getElementById('current-player');
+const restartButton = document.getElementById('restart-btn');
+const gridBoxes = document.querySelectorAll('.tile');
+const resultMessage = document.getElementById('result');
 
 //-------------------------------EVENT LISTENERS-------------------------------//
 
-GameBoard.renderBoard();
+restartButton.addEventListener('click', () => {
+    Game.reset();
+    GameBoard.resetBoard();
+    currentPlayer.textContent = "Player 1's Turn";
+    togglePopup();
+})
+
+gridBoxes.forEach((box, index) => {
+    box.addEventListener('click', () => {
+        box.textContent = Game.currentPlayer.marker;
+        box.classList.add(Game.currentPlayer.marker);
+        box.style.pointerEvents = 'none';
+        GameBoard.setBoardMarker(Game.currentPlayer.marker, index);
+        Game.remainingSpots -= 1;
+        Game.checkForWinner();
+        if (Game.getWinner() === false) {
+            if (Game.remainingSpots > 0) {
+                Game.nextPlayer();
+                currentPlayer.textContent = `${Game.displayCurrentPlayer()}'s Turn`;
+            } else {
+                togglePopup();
+                resultMessage.textContent = "It's a tie!"
+            }
+        } else {
+            togglePopup();
+            resultMessage.textContent = `${Game.displayCurrentPlayer()} wins!`;
+        }
+    })
+});
+
+//-------------------------------DOM FUNCTIONS-------------------------------//
+
+function togglePopup() {
+    restartOverlay.classList.toggle('active');
+}
