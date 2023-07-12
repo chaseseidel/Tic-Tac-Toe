@@ -5,6 +5,13 @@
     padding: 0;
 }
 
+:root {
+    --blue-color: #A2D2FF;
+    --white-color: #FFFFFF;
+    --gray-color-1: #949494;
+    --gray-color-2: #e7e7e7;
+}
+
 html {
     font-family: Roboto, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -12,7 +19,8 @@ html {
 
 .main-content {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 
 .game-board {
@@ -20,7 +28,7 @@ html {
     grid-template-columns: repeat(3, minmax(100px, 200px));
     grid-template-rows: repeat(3, minmax(100px, 200px));
     gap: 10px;
-    padding: 100px;
+    padding: 0 100px;
 }
 
 .tile {
@@ -34,6 +42,23 @@ html {
 
 .O {
     background-color: rgb(148, 216, 228);
+}
+
+.top-bar {
+    background-color: var(--blue-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+}
+
+#logo-text {
+    font-size: 3rem;
+    color: var(--white-color);
+}
+
+#current-player {
+    padding: 50px;
 }
 
 .restart-game .overlay {
@@ -59,7 +84,7 @@ html {
     flex-direction: column;
     align-items: center;
     border-radius: 6px;
-    padding: 25px 50px;
+    padding: 50px;
 }
 
 .restart-game.active .overlay {
@@ -69,4 +94,20 @@ html {
 .restart-game.active .game-over {
     transition: all 200ms ease-in-out;
     transform: translate(-50%, -50%) scale(1);
+}
+
+.close-btn {
+    height: 30px;
+    width: 30px;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    background-color: var(--gray-color-2);
+    text-align: center;
+    font-size: 25px;
+    border-radius: 50%;
+}
+
+.close-btn:hover {
+    transform: scale(1.05);
 }
